@@ -1,5 +1,3 @@
-require 'pry'
-
 suits   = ['Hearts', 'Spades', 'Diamonds', 'Clubs']
 cards   = ['Ace', '2', '3', '4', '5', '6', '7', '8',
            '9', '10', 'Jack', 'Queen', 'King']
@@ -9,8 +7,9 @@ def prompt(string)
 end
 
 def opening_game_prompt
-  prompt "Welcome to Twenty-One! Dealer, please deliver the cards..."
+  prompt "Welcome to Twenty-One! First to 5 points wins the game."
   prompt "-------------------------"
+  prompt "Dealer, please deliver the cards..."
   prompt ""
 end
 
@@ -104,54 +103,71 @@ end
 
 loop do
   system 'clear'
-  player_cards = []
-  dealer_cards = []
-  deck = initialize_deck(suits, cards)
-  answer = nil
-  deal_initial_cards(deck, player_cards)
-  deal_initial_cards(deck, dealer_cards)
   opening_game_prompt
-
-  player_total = total(player_cards)
-  dealer_total = total(dealer_cards)
-  display_opening_player_totals(dealer_cards, player_cards)
-
+  player_score = 0
+  dealer_score = 0
   loop do
-    puts "hit or stay?"
-    answer = gets.chomp
-    break if answer == 'stay' || busted?(player_total)
-    deal_additional_card(deck, player_cards)
+    player_cards = []
+    dealer_cards = []
     player_total = total(player_cards)
-    break if busted?(player_total)
-    display_player_total(player_cards)
-  end
+    dealer_total = total(dealer_cards)
+    deck = initialize_deck(suits, cards)
+    answer = nil
+    deal_initial_cards(deck, player_cards)
+    deal_initial_cards(deck, dealer_cards)
+    display_opening_player_totals(dealer_cards, player_cards)
 
-  if busted?(player_total) # If player bust, dealer wins.
-    prompt "You've busted with #{player_total}. Dealer wins!"
-  else
-    prompt "You chose to stay at #{total(player_cards)}."
+    # Player turn
     loop do
-      break if dealer_stays?(dealer_total) || busted?(dealer_total)
-      deal_additional_card(deck, dealer_cards)
-      dealer_total = total(dealer_cards)
-      break if busted?(dealer_total)
+      puts "hit or stay?"
+      answer = gets.chomp
+      player_total = total(player_cards)
+      break if answer == 'stay' || busted?(player_total)
+      deal_additional_card(deck, player_cards)
+      player_total = total(player_cards)
+      break if busted?(player_total)
+      display_player_total(player_cards)
     end
 
-    if busted?(dealer_total)
-      prompt "Dealer busted with #{dealer_total}. You win!"
+    if busted?(player_total) # If player bust, dealer wins.
+      prompt "You've busted with #{player_total}. Dealer wins!"
+      dealer_score += 1
     else
-      prompt "Dealer chose to stay at #{dealer_total}."
-    end
+      prompt "You chose to stay at #{total(player_cards)}."
 
-    if dealer_stays?(dealer_total) && !busted?(dealer_total)
-      if player_total > dealer_total
-        prompt "Player won!"
-      elsif dealer_total > player_total
-        prompt "Dealer won!"
-      elsif player_total == dealer_total
-        prompt "It's a draw!"
+      # Dealer turn
+      loop do
+        dealer_total = total(dealer_cards)
+        break if dealer_stays?(dealer_total) || busted?(dealer_total)
+        deal_additional_card(deck, dealer_cards)
+        dealer_total = total(dealer_cards)
+        break if busted?(dealer_total)
+      end
+
+      if busted?(dealer_total)
+        prompt "Dealer busted with #{dealer_total}. You win!"
+        player_score += 1
+      else
+        prompt "Dealer chose to stay at #{dealer_total}."
+      end
+
+      if dealer_stays?(dealer_total) && !busted?(dealer_total)
+        if player_total > dealer_total
+          prompt "Player won!"
+          player_score += 1
+        elsif dealer_total > player_total
+          prompt "Dealer won!"
+          dealer_score += 1
+        else
+          prompt "It's a draw!"
+        end
       end
     end
+
+    prompt "Player: #{player_score}. Dealer #{dealer_score}."
+    prompt ""
+
+    break if player_score == 5 || dealer_score == 5
   end
 
   prompt "Play again? (y or n)"
