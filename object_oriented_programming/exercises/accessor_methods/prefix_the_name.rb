@@ -1,24 +1,22 @@
 =begin
-  Using the following code, add the appropriate accessor methods so that
-  @name is returned with the prefix 'Mr.'
+  Using the following code, add the appropriate accessor methods so that @name is returned with the added prefix 'Mr.'.
 
-  Expected Output:
+  Expected output:
+
   Mr. James
 =end
 
-# We need a getter method for the name instance variable
-# For the name setter method, it should return the name passed in as an argument
-# with 'Mr.' prefixed to it.
-
 class Person
-  attr_reader :name
+  attr_writer :name
 
-  def name=(name)
-    @name = "Mr. #{name}"
-    # or @name = 'Mr. ' + name
+  def name
+    "Mr. #{@name}"
   end
 end
 
 person1 = Person.new
 person1.name = 'James'
 puts person1.name
+
+# We need to manually implement the getter method in order to return the prefixed @name.
+# In the method we add the desired prefix, and add @name through string interpolation.

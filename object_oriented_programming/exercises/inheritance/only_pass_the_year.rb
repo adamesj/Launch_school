@@ -1,9 +1,12 @@
-# Using the following code, allow Truck to accept a second argument upon instantiation.
-# Name the parameter bed_type and implement the modification so that Car continues
-# to only accept one argument.
-# Expected output:
-# 1994
-# Short
+=begin
+  Using the following code, allow Truck to accept a second argument upon instantiation.
+  Name the parameter bed_type and implement the modification so that Car continues to only accept one argument.
+
+  Expected output:
+
+  1994
+  Short
+=end
 
 class Vehicle
   attr_reader :year
@@ -18,8 +21,6 @@ class Truck < Vehicle
 
   def initialize(year, bed_type)
     super(year)
-    # When called with specific arguments, eg. super(a, b),
-    # the specified arguments will be sent up the method lookup chain.
     @bed_type = bed_type
   end
 end
@@ -30,3 +31,5 @@ end
 truck1 = Truck.new(1994, 'Short')
 puts truck1.year
 puts truck1.bed_type
+
+# We need to use #super. Unlike the previous exercise, though, we only want to pass one argument - year - instead of all of them.

@@ -1,9 +1,10 @@
 =begin
   Using the following code, add the appropriate accessor methods.
-  Keep in mind that the last_name getter shouldn't be visible
-  outside of the class, while the first_name getter should be visible outside of the class.
+  Keep in mind that the last_name getter shouldn't be visible outside the class, while the first_name getter should be visible outside the class.
 
-  Expected Output: false
+  Expected output:
+
+  false
 =end
 
 class Person
@@ -11,17 +12,20 @@ class Person
   attr_writer :last_name
 
   def first_equals_last?
-    first_name == last_name # getter method for first_name and last_name
+    first_name == last_name
   end
 
   private
 
-  def last_name # by making the getter method private, it will be unavailable outside of the class
-    @last_name
-  end
+  attr_reader :last_name
 end
 
 person1 = Person.new
 person1.first_name = 'Dave'
 person1.last_name = 'Smith'
 puts person1.first_equals_last?
+
+
+# When handling data within a class, sometimes certain data needs to be kept private,
+# meaning that only the object knows what the data is.
+# In this case, we want to control access to @last_name.

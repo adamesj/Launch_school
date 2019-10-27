@@ -1,12 +1,9 @@
 =begin
-  Using the following code, multiply @age by 2 upon assignment, then multiply @age by 2
-  when @age is returned by the getter method.
+  Using the following code, multiply @age by 2 upon assignment, then multiply @age by 2 again when @age is returned by the getter method.
 
   Expected output:
-  80
 
-  Created a setter method that multiplies the argument by 2
-  Created a getter method that multiplies the argument by 2 and returns the value
+  80
 =end
 
 class Person
@@ -17,8 +14,26 @@ class Person
   def age
     @age * 2
   end
+
+  # refactored
+
+  # def age=(age)
+  #   @age = double(age)
+  # end
+
+  # def age
+  #   double(@age)
+  # end
+
+  # private
+
+  # def double(value)
+  #   value * 2
+  # end
 end
 
 person1 = Person.new
 person1.age = 20
 puts person1.age
+
+# Performing calculations in accessor methods can be convenient if that's the only place you need the calculation to be performed.
